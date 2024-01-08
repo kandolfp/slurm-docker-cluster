@@ -1,0 +1,17 @@
+#%Module
+
+if [info exists version]==0 {
+   set version [file tail [module-info version [module-info name] ] ]
+}
+set julia_home /opt/julia
+
+proc ModulesHelp { } {
+   puts stderr "This module adds julia $version to your path"
+}
+
+module-whatis "This module adds julia $version to your path\n"
+
+set basedir $julia_home/julia-$version
+prepend-path PATH $basedir/bin
+prepend-path LD_LIBRARY_PATH $basedir/lib/julia
+setenv JULIA_HOME $basedir
