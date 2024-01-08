@@ -35,6 +35,7 @@ RUN set -ex \
        vim-enhanced \
        http-parser-devel \
        json-c-devel \
+       environment-modules \
     && yum clean all \
     && rm -rf /var/cache/yum
 
@@ -91,7 +92,15 @@ RUN set -x \
     && chown slurm:slurm /etc/slurm/slurmdbd.conf \
     && chmod 600 /etc/slurm/slurmdbd.conf
 
+RUN mkdir -p /opt/julia/ \
+    && cd /opt/julia/ \
+    && wget https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.4-linux-x86_64.tar.gz \
+    && tar -xvzf julia-1.9.4-linux-x86_64.tar.gz \
+    && rm julia-1.9.4-linux-x86_64.tar.gz \
+    && mkdir -p /etc/modulefiles/julia/
+COPY julia.module /etc/modulefiles/julia/1.9.4
 
+WORKDIR /data
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
