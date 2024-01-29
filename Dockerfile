@@ -94,9 +94,9 @@ RUN set -x \
 
 RUN mkdir -p /opt/julia/ \
     && cd /opt/julia/ \
-    && wget https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.4-linux-x86_64.tar.gz \
-    && tar -xvzf julia-1.9.4-linux-x86_64.tar.gz \
-    && rm julia-1.9.4-linux-x86_64.tar.gz \
+    && wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.9/julia-1.9.4-linux-aarch64.tar.gz \
+    && tar -xvzf julia-1.9.4-linux-aarch64.tar.gz \
+    && rm julia-1.9.4-linux-aarch64.tar.gz \
     && mkdir -p /etc/modulefiles/julia/
 COPY julia.module /etc/modulefiles/julia/1.9.4
 
