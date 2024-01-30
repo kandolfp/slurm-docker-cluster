@@ -92,13 +92,20 @@ RUN set -x \
     && chown slurm:slurm /etc/slurm/slurmdbd.conf \
     && chmod 600 /etc/slurm/slurmdbd.conf
 
-RUN mkdir -p /opt/julia/ \
-    && cd /opt/julia/ \
+RUN mkdir -p /opt/x86/julia/ \
+    && cd /opt/x86/julia/ \
     && wget https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.4-linux-x86_64.tar.gz \
     && tar -xvzf julia-1.9.4-linux-x86_64.tar.gz \
     && rm julia-1.9.4-linux-x86_64.tar.gz \
-    && mkdir -p /etc/modulefiles/julia/
-COPY julia.module /etc/modulefiles/julia/1.9.4
+    && mkdir -p /etc/modulefiles/x86/julia/
+COPY julia.module /etc/modulefiles/x86/julia/1.9.4
+RUN mkdir -p /opt/aarch64/julia/ \
+    && cd /opt/aarch64/julia/ \
+    && wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.9/julia-1.9.4-linux-aarch64.tar.gz \
+    && tar -xvzf julia-1.9.4-linux-aarch64.tar.gz \
+    && rm julia-1.9.4-linux-aarch64.tar.gz \
+    && mkdir -p /etc/modulefiles/aarch64/julia/
+COPY julia.module /etc/modulefiles/aarch64/julia/1.9.4
 
 WORKDIR /data
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
