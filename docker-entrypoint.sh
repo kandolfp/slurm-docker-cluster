@@ -6,6 +6,11 @@ then
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
 
+    echo "--> Starting the sshd"
+    /usr/sbin/sshd
+    echo "--> Remove warning for ssh login"
+    rm /run/nologin
+
     echo "---> Starting the Slurm Database Daemon (slurmdbd) ..."
 
     {
@@ -25,6 +30,11 @@ if [ "$1" = "slurmctld" ]
 then
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
+
+    echo "--> Starting the sshd"
+    /usr/sbin/sshd
+    echo "--> Remove warning for ssh login"
+    rm /run/nologin
 
     echo "---> Waiting for slurmdbd to become active before starting slurmctld ..."
 
@@ -47,6 +57,11 @@ if [ "$1" = "slurmd" ]
 then
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
+
+    echo "--> Starting the sshd"
+    /usr/sbin/sshd
+    echo "--> Remove warning for ssh login"
+    rm /run/nologin
 
     echo "---> Waiting for slurmctld to become active before starting slurmd..."
 

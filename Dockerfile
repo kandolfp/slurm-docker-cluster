@@ -36,8 +36,18 @@ RUN set -ex \
        http-parser-devel \
        json-c-devel \
        environment-modules \
+       openssh-server \
     && yum clean all \
     && rm -rf /var/cache/yum
+
+RUN /usr/bin/ssh-keygen -A \
+    && ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N "" \
+    && cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys \
+    && echo "Host *" >> /root/.ssh/config \
+    && echo "Host *" >> /root/.ssh/config \
+    && echo "    StrictHostKeyChecking no" >> /root/.ssh/config
+
+COPY sshd_config /etc/ssh/sshd_config
 
 RUN alternatives --set python /usr/bin/python3
 
@@ -59,6 +69,7 @@ RUN set -x \
     && ./configure --enable-debug --prefix=/usr --sysconfdir=/etc/slurm \
         --with-mysql_config=/usr/bin  --libdir=/usr/lib64 \
     && make install \
+    && make install-contrib \
     && install -D -m644 etc/cgroup.conf.example /etc/slurm/cgroup.conf.example \
     && install -D -m644 etc/slurm.conf.example /etc/slurm/slurm.conf.example \
     && install -D -m644 etc/slurmdbd.conf.example /etc/slurm/slurmdbd.conf.example \
