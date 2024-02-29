@@ -44,7 +44,6 @@ RUN /usr/bin/ssh-keygen -A \
     && ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N "" \
     && cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys \
     && echo "Host *" >> /root/.ssh/config \
-    && echo "Host *" >> /root/.ssh/config \
     && echo "    StrictHostKeyChecking no" >> /root/.ssh/config
 
 COPY sshd_config /etc/ssh/sshd_config
