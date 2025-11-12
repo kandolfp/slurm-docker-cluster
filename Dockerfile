@@ -28,6 +28,9 @@ RUN set -ex \
        python3-devel \
        python3-pip \
        python3 \
+       python3.12-devel \
+       python3.12-pip \
+       python3.12 \
        mariadb-server \
        mariadb-devel \
        psmisc \
@@ -48,7 +51,7 @@ RUN /usr/bin/ssh-keygen -A \
 
 COPY sshd_config /etc/ssh/sshd_config
 
-RUN alternatives --set python /usr/bin/python3
+RUN alternatives --set python /usr/bin/python3.12
 
 RUN pip3 install Cython nose
 
@@ -102,20 +105,15 @@ RUN set -x \
     && chown slurm:slurm /etc/slurm/slurmdbd.conf \
     && chmod 600 /etc/slurm/slurmdbd.conf
 
-RUN mkdir -p /opt/x86/julia/ \
-    && cd /opt/x86/julia/ \
-    && wget https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.4-linux-x86_64.tar.gz \
-    && tar -xvzf julia-1.9.4-linux-x86_64.tar.gz \
-    && rm julia-1.9.4-linux-x86_64.tar.gz \
-    && mkdir -p /etc/modulefiles/x86/julia/
-COPY julia.module /etc/modulefiles/x86/julia/1.9.4
-RUN mkdir -p /opt/aarch64/julia/ \
-    && cd /opt/aarch64/julia/ \
-    && wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.9/julia-1.9.4-linux-aarch64.tar.gz \
-    && tar -xvzf julia-1.9.4-linux-aarch64.tar.gz \
-    && rm julia-1.9.4-linux-aarch64.tar.gz \
-    && mkdir -p /etc/modulefiles/aarch64/julia/
-COPY julia.module /etc/modulefiles/aarch64/julia/1.9.4
+RUN mkdir -p /opt/x86/qiskit/aqt-1.14.0/ \
+    && alternatives --set python3 /usr/bin/python3.12 \
+    && python3 --version \
+    && python3 -m venv /opt/x86/qiskit/aqt-1.14.0/ --prompt aqt-1.14.0 \
+    && source /opt/x86/qiskit/aqt-1.14.0/bin/activate \
+    && pip install --upgrade pip \
+    && pip3 install qiskit-aqt-provider qiskit pylatexenc matplotlib jupyter qiskit-algorithms \
+    && mkdir -p /etc/modulefiles/qiskit/
+COPY aqt.module /etc/modulefiles/qiskit/aqt-1.14.0
 
 WORKDIR /data
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

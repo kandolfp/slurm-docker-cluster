@@ -1,0 +1,20 @@
+#%Module
+
+if [info exists prefix]==0 {
+   set prefix [file dirname [module-info name ] ]
+}
+
+if [info exists version]==0 {
+   set version [file tail [module-info version [module-info name] ] ]
+}
+set aqt_home /opt/x86/qiskit
+
+proc ModulesHelp { } {
+   puts stderr "This module adds aqt-qiskit-provider $version to your path"
+}
+
+module-whatis "This module adds aqt-qiskit-provider $version to your path\n"
+
+set basedir $aqt_home/$version
+prepend-path PATH $basedir/bin
+prepend-path LD_LIBRARY_PATH $basedir/lib/
